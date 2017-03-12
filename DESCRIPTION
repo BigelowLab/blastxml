@@ -1,0 +1,15 @@
+Package: blastxml
+Title: Extract data from Blast XML files
+Version: 0.1
+Depends:
+    R (>= 3.2)
+Imports:
+    xml2,
+    magrittr
+Maintainer: Ben Tupper <btupper@bigelow.org>
+Author: Ben Tupper <btupper@bigelow.org>
+License: MIT + file LICENSE
+Collate:
+    'blastxml-package.R'
+    'dump.R'
+RoxygenNote: 5.0.1
