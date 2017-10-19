@@ -6,6 +6,6 @@
 \alias{blastxml-package}
 \title{blastxml: Extract data from Blast XML files}
 \description{
-blastxml provides methods for extracting blast resuls in XML files to character martices.
+blastxml provides methods for extracting blast resuls in XML files to
+character martices.
 }
-

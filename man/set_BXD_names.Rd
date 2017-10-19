@@ -29,4 +29,3 @@ Set the fields to retrieve for the application
      x <- blastxml_dump(xmlfile, bxd = bxd)
  }  
 }
-

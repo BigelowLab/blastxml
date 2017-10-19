@@ -2,13 +2,14 @@
 % Please edit documentation in R/dump.R
 \name{BXD}
 \alias{BXD}
-\title{A list to identify the Blastfields to retrieve.}
+\title{A list to identify the Blast fields to retrieve.}
 \usage{
-BXD(app = "blastn", fields = NULL)
+BXD(x = "blastn", fields = NULL)
 }
 \arguments{
-\item{app}{character by default the fields are for 'blastn' but this 
-is set automatically when the file is opened.}
+\item{x}{character by default the fields are for 'blastn' but this 
+is set automatically when the file is opened.  Alternatively, this can be
+the xml filename.}
 
 \item{fields}{character of NULL  if not NULL fields are subset to include 
 just these.  The default can be found using \code{get_BXD_names()}}
@@ -48,4 +49,3 @@ blastn includes...
  Hsp_hseq
  Hsp_midline
 }
-

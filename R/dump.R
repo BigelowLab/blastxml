@@ -1,4 +1,4 @@
-#' A list to identify the Blastfields to retrieve.
+#' A list to identify the Blast fields to retrieve.
 #'
 #' blastn includes...
 #'  Iteration_iter_num
@@ -28,8 +28,9 @@
 #'  Hsp_midline
 #'
 #' @export
-#' @param app character by default the fields are for 'blastn' but this 
-#'  is set automatically when the file is opened.
+#' @param x character by default the fields are for 'blastn' but this 
+#'  is set automatically when the file is opened.  Alternatively, this can be
+#'  the xml filename. 
 #' @param fields character of NULL  if not NULL fields are subset to include 
 #'  just these.  The default can be found using \code{get_BXD_names()}
 #' @return a named list of fields to return
@@ -37,9 +38,14 @@
 #'  \item{app the name of the blast application by default 'blastn'}
 #'  \item{blastn a list of character vectors fields in for Iteration, Hit and Hsp}
 #' }
-BXD <- function(app = 'blastn', fields = NULL){
+BXD <- function(x = 'blastn', fields = NULL){
+    if (file.exists(x)){
+        app = blastxml_program(x)
+    } else {
+        app = x
+    }
     bxd <- list(
-        app = 'blastn',
+        app = app,
         blastn = list(
             Iteration = c(
                 "Iteration_iter-num",
@@ -72,7 +78,7 @@ BXD <- function(app = 'blastn', fields = NULL){
             )
         )
     }
-    
+        
 #' Get the fields for the application
 #' 
 #' @export
@@ -119,9 +125,9 @@ set_BXD_names <- function(x, bxd = BXD()){
 #'
 #' @export
 #' @param x xml2::xml_node for Hsp
-#' @param nm charcater, the Hsp elements to retrieve
+#' @param bxd list of known fields for the blast type, see \code{link{BXD}}
 #' @return a character vector of Hsp value or NULL
-hsp_extract <- function(x, bxd = BXD ){
+hsp_extract <- function(x, bxd = BXD() ){
     
     nm = bxd[[bxd$app]][['Hsp']]
     if (length(nm) == 0) return(NULL)
@@ -134,9 +140,9 @@ hsp_extract <- function(x, bxd = BXD ){
 #'
 #' @export
 #' @param x xml2::xml_node for Hit
-#' @param nm charcater, the Hit elements to retrieve
+#' @param bxd list of known fields for the blast type, see \code{link{BXD}}
 #' @return a character vector of Hit value or NULL
-hit_extract <- function(x, bxd = BXD){
+hit_extract <- function(x, bxd = BXD()){
     
     nm = bxd[[bxd$app]][['Hit']]
     if (length(nm) == 0) return(NULL)
@@ -155,9 +161,9 @@ hit_extract <- function(x, bxd = BXD){
 #'
 #' @export
 #' @param x xml2::xml_node for Iteration
-#' @param nm charcater, the Iteration elements to retrieve
+#' @param bxd list of known fields for the blast type, see \code{link{BXD}}
 #' @return a character vector of Iteration value or NULL
-iter_extract <- function(x, bxd = BXD){
+iter_extract <- function(x, bxd = BXD()){
 
     nm = bxd[[bxd$app]][['Iteration']]
     if (length(nm) == 0) return(NULL)
@@ -189,35 +195,46 @@ get_example_filename <- function(app = 'blastn'){
 #' @param xml_file character - the path and name of the XML file
 #' @param out_file character the path and name to output file, 
 #'  or NULL to skip saving the file
+#' @param sep charcater field separator if writing to file
+#' @param bxd list of known fields for the blast type, see \code{link{BXD}}
+#' @param fields character vector of fields to extract, defaults to all in bxd
+#' @param form character, either matrix or tibble
 #' @param ... further arguments for \code{\link{write.table}}
-#' @return character matrix invisibly
+#' @return character matrix or tibble invisibly
 blastxml_dump <- function(
     xml_file = get_example_filename(), 
     out_file = NULL,
     sep = "\t",
-    bxd = BXD(),
-    fields = NULL){
+    bxd = NULL,
+    fields = NULL, 
+    form = c('matrix', 'tibble')[1],
+    ...){
     
+    if (is.null(bxd)) bxd = BXD(x = blastxml_program(xml_file))   
+
+    if (!is.null(fields)) bxd <- set_BXD_names(fields, bxd = bxd)  
+            
     X <- try(xml2::read_xml(xml_file))
     if (inherits(X, 'try-error')){
         stop("error reading XML")
     }
 
-    app <- xml2::xml_find_first(X,'BlastOutput_program') %>% 
-        xml2::xml_text()
-        
-    bxd[['app']] <- app
-    if (!is.null(fields)) bxd <- set_BXD_names(fields, bxd = bxd)    
-    
     Iters <- xml2::xml_find_all(X, 'BlastOutput_iterations/Iteration')
     if (length(Iters) == 0){
         stop("no BlastOutput_iterations children found")
     }
     
+    x <- try(do.call(rbind, lapply(Iters, iter_extract, bxd = bxd)))
     
-    x <- do.call(rbind, lapply(Iters, iter_extract, bxd = bxd))
-    if (!is.null(out_file))
+    if (!is.null(out_file) && !inherits(x, 'try-error'))
         write.table(x, file = out_file, ...)
+    
+    if((tolower(form) == 'tibble') && !inherits(x, 'try-error')){
+        x <- x %>% 
+            lapply(type.convert, as.is = TRUE) %>% 
+            tibble::as_tibble()  
+    }
+    
     
     invisible(x)        
 }

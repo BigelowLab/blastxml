@@ -4,12 +4,12 @@
 \alias{hit_extract}
 \title{Extract values from an Hit node}
 \usage{
-hit_extract(x, bxd = BXD)
+hit_extract(x, bxd = BXD())
 }
 \arguments{
 \item{x}{xml2::xml_node for Hit}
 
-\item{nm}{charcater, the Hit elements to retrieve}
+\item{bxd}{list of known fields for the blast type, see \code{link{BXD}}}
 }
 \value{
 a character vector of Hit value or NULL
@@ -17,4 +17,3 @@ a character vector of Hit value or NULL
 \description{
 Extract values from an Hit node
 }
-

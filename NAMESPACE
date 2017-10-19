@@ -2,6 +2,8 @@
 
 export(BXD)
 export(blastxml_dump)
+export(blastxml_info)
+export(blastxml_program)
 export(get_BXD_names)
 export(get_example_filename)
 export(hit_extract)

@@ -15,4 +15,3 @@ a filename or empty string
 \description{
 Retrieve the path for an example blastn file
 }
-

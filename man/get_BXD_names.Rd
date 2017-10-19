@@ -15,4 +15,3 @@ a character vector
 \description{
 Get the fields for the application
 }
-

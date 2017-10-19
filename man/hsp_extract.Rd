@@ -4,12 +4,12 @@
 \alias{hsp_extract}
 \title{Extract values from an Hsp node}
 \usage{
-hsp_extract(x, bxd = BXD)
+hsp_extract(x, bxd = BXD())
 }
 \arguments{
 \item{x}{xml2::xml_node for Hsp}
 
-\item{nm}{charcater, the Hsp elements to retrieve}
+\item{bxd}{list of known fields for the blast type, see \code{link{BXD}}}
 }
 \value{
 a character vector of Hsp value or NULL
@@ -17,4 +17,3 @@ a character vector of Hsp value or NULL
 \description{
 Extract values from an Hsp node
 }
-

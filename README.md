@@ -4,9 +4,11 @@
 
 [R (>= 3.2)](https://www.r-project.org/) 
 
-[xml2](http://cran.r-project.org/web/packages/xml2/index.html)
+[xml2](https://cran.r-project.org/package=xml2)
 
-[magrittr](http://cran.r-project.org/web/packages/magrittr/index.html)
+[magrittr](https://cran.r-project.org/package=magrittr)
+
+[tibble](https://cran.r-project.org/package=tibble)
 
 ### Installation
 
@@ -14,28 +16,40 @@
 library(devtools)
 install_github("BigelowLab/blastxml")
 
-# or into the the system-wide library
+### or into the the system-wide library
 with_lib(.Library, install_github("BigelowLab/blastxml"))
 ```
 
 ### Example
 
-A straight dump of data into a character matrix.
+Retrieve basic info about the file contents.
 
-```R
+```
+
 xmlfile <- system.file("extdata", "blastn.xml.gz", package = "blastxml")
+info <- blastxml_info(xmlfile)
+
+```
+
+A straight dump of data into a character matrix or a tibble.
+
+```
+
 x <- blastxml_dump(xmlfile)
+
 ```
 
 You can save to a delimited text file.
 
-```R
+```
+
 x <- blastxml_dump(xmlfile, out_file = 'dump.csv', sep = ",", row.names = FALSE)
+
 ```
 
 You can reduce the number of fields to extract.
 
-```R
+```
 # get a copy of the default listing of fields
 bxd <- BXD(app = 'blastn')
 fields <- get_BXD_names()

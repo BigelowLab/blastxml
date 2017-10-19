@@ -4,12 +4,12 @@
 \alias{iter_extract}
 \title{Extract values from an Iteration node}
 \usage{
-iter_extract(x, bxd = BXD)
+iter_extract(x, bxd = BXD())
 }
 \arguments{
 \item{x}{xml2::xml_node for Iteration}
 
-\item{nm}{charcater, the Iteration elements to retrieve}
+\item{bxd}{list of known fields for the blast type, see \code{link{BXD}}}
 }
 \value{
 a character vector of Iteration value or NULL
@@ -17,4 +17,3 @@ a character vector of Iteration value or NULL
 \description{
 Extract values from an Iteration node
 }
-

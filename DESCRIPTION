@@ -1,15 +1,19 @@
 Package: blastxml
 Title: Extract data from Blast XML files
+Description: Provides simple interface for extracting data from XML formatted 
+    blast results.
 Version: 0.1
 Depends:
     R (>= 3.2)
 Imports:
     xml2,
-    magrittr
+    magrittr,
+    tibble
 Maintainer: Ben Tupper <btupper@bigelow.org>
 Author: Ben Tupper <btupper@bigelow.org>
 License: MIT + file LICENSE
 Collate:
     'blastxml-package.R'
+    'blast.R'
     'dump.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
