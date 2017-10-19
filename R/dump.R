@@ -230,7 +230,9 @@ blastxml_dump <- function(
         write.table(x, file = out_file, ...)
     
     if((tolower(form) == 'tibble') && !inherits(x, 'try-error')){
+        
         x <- x %>% 
+            tibble::as_tibble() %>%
             lapply(type.convert, as.is = TRUE) %>% 
             tibble::as_tibble()  
     }
